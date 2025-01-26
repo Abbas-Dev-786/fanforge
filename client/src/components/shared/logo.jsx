@@ -11,7 +11,7 @@ const Logo = ({ onClick, variant }) => {
           "& span": { color: variant === "primary" ? "primary.main" : "unset" },
         }}
       >
-        Course<span>space</span>
+        Fan<span>Forge</span>
       </Typography>
     </Box>
   );

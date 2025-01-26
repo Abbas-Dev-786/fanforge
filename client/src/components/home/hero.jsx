@@ -8,6 +8,7 @@ import { expsHero } from "@/data";
 import { Button } from "@mui/material";
 import HeroImg from "@/assets/home-hero.jpg";
 import CertificateImg from "@/assets/certificate.png";
+import PropTypes from "prop-types";
 
 const ExpItem = ({ item }) => {
   const { value, label } = item;
@@ -30,6 +31,13 @@ const ExpItem = ({ item }) => {
   );
 };
 
+ExpItem.propTypes = {
+  item: PropTypes.shape({
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    label: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 const Hero = () => {
   return (
     <Box
@@ -45,7 +53,7 @@ const Hero = () => {
         <Grid
           container
           spacing={0}
-          sx={{ flexDirection: { xs: "column", md: "unset" } }}
+          sx={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid item xs={12} md={7}>
             <Box
@@ -61,24 +69,21 @@ const Hero = () => {
                 <Typography
                   component="h2"
                   sx={{
-                    position: "relative",
                     fontSize: { xs: 40, md: 72 },
                     letterSpacing: 1.5,
                     fontWeight: "bold",
-                    lineHeight: 1.3,
                   }}
                 >
                   <Typography
                     component="mark"
                     sx={{
-                      position: "relative",
                       color: "primary.main",
                       fontSize: "inherit",
                       fontWeight: "inherit",
                       backgroundColor: "unset",
                     }}
                   >
-                    Improve{" "}
+                    Follow{" "}
                   </Typography>
                   your{" "}
                   <Typography
@@ -86,42 +91,17 @@ const Hero = () => {
                     sx={{
                       fontSize: "inherit",
                       fontWeight: "inherit",
-                      position: "relative",
-                      "& svg": {
-                        position: "absolute",
-                        top: -16,
-                        right: -21,
-                        width: { xs: 22, md: 30 },
-                        height: "auto",
-                      },
                     }}
                   >
-                    Skill
-                    <svg version="1.1" viewBox="0 0 3183 3072">
-                      <g id="Layer_x0020_1">
-                        <path
-                          fill="#127C71"
-                          d="M2600 224c0,0 0,0 0,0 236,198 259,562 52,809 -254,303 -1849,2089 -2221,1776 -301,-190 917,-1964 1363,-2496 207,-247 570,-287 806,-89z"
-                        />
-                        <path
-                          fill="#127C71"
-                          d="M3166 2190c0,0 0,0 0,0 64,210 -58,443 -270,516 -260,90 -1848,585 -1948,252 -104,-230 1262,-860 1718,-1018 212,-73 437,39 500,250z"
-                        />
-                        <path
-                          fill="#127C71"
-                          d="M566 3c0,0 0,0 0,0 -219,-26 -427,134 -462,356 -44,271 -255,1921 90,1962 245,62 628,-1392 704,-1869 36,-221 -114,-424 -332,-449z"
-                        />
-                      </g>
-                    </svg>
+                    Teams
                   </Typography>{" "}
-                  <br />
-                  with Different Way
+                  and Players
                 </Typography>
               </Box>
               <Box sx={{ mb: 4, width: { xs: "100%", md: "70%" } }}>
                 <Typography sx={{ color: "text.secondary", lineHeight: 1.6 }}>
                   {
-                    "Let's take an online course to improve your skills in a different way, you can set your own study time according to your learning speed. So you san study comfortable and absorb tge material easily."
+                    "Stay updated with the latest highlights and commentary. Choose your favorite teams and players, and receive personalized audio, video, and text digests in English, Spanish, or Japanese."
                   }
                 </Typography>
               </Box>
@@ -150,14 +130,14 @@ const Hero = () => {
                     variant="outlined"
                     startIcon={<PlayArrowIcon />}
                   >
-                    Watch Video
+                    Watch Demo
                   </Button>
                 </ScrollLink>
               </Box>
             </Box>
           </Grid>
           <Grid item xs={12} md={5} sx={{ position: "relative" }}>
-            {/* Sertificate badge */}
+            {/* Certificate badge */}
             <Box
               sx={{
                 position: "absolute",
