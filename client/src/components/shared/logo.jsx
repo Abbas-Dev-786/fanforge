@@ -17,8 +17,4 @@ const Logo = ({ onClick, variant }) => {
   );
 };
 
-Logo.defaultProps = {
-  variant: "primary",
-};
-
 export default Logo;

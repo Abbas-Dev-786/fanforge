@@ -7,7 +7,6 @@ import { useTheme } from "@mui/material/styles";
 import { Menu, Close } from "@mui/icons-material";
 import Logo from "./logo";
 import Navigation from "./navigation";
-import StyledButton from "../ui/styled-button";
 
 const Navbar = () => {
   const [visibleMenu, setVisibleMenu] = useState(false);
@@ -52,12 +51,7 @@ const Navbar = () => {
           >
             <Box /> {/* Magic space */}
             <Navigation />
-            <Box sx={{ "& button:first-child": { mr: 2 } }}>
-              <StyledButton disableHoverEffect={true} variant="outlined">
-                Sign In
-              </StyledButton>
-              <StyledButton disableHoverEffect={true}>Sign Up</StyledButton>
-            </Box>
+            <Box sx={{ "& button:first-of-type": { mr: 2 } }}></Box>
             {visibleMenu && matchMobileView && (
               <IconButton
                 sx={{

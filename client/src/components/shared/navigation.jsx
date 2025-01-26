@@ -59,17 +59,6 @@ const Navigation = () => {
             },
           }}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 12,
-              transform: "rotate(3deg)",
-              "& img": { width: 44, height: "auto" },
-            }}
-          >
-            {/* eslint-disable-next-line */}
-            <img src="/images/headline-curve.svg" alt="Headline curve" />
-          </Box>
           {label}
         </Box>
       ))}
