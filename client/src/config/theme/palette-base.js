@@ -1,15 +1,15 @@
 const paletteBase = {
   primary: {
-    light: "#9FF1D2",
-    main: "#127C71",
-    dark: "#0D6A69",
-    contrastText: "#fbfbfb",
+    light: "#0E4594", // MLB Blue (lighter)
+    main: "#002D62", // MLB Deep Blue
+    dark: "#001E3F", // MLB Navy
+    contrastText: "#FFFFFF",
   },
   secondary: {
-    light: "#FDE6A8",
-    main: "#ffaf35",
-    dark: "#D0821C",
-    contrastText: "#fbfbfb",
+    light: "#D50032", // MLB Red (lighter)
+    main: "#BA0C2F", // MLB Red
+    dark: "#8B0000", // Dark Red
+    contrastText: "#FFFFFF",
   },
 };
 
