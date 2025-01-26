@@ -42,7 +42,7 @@ const Feature = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={5}>
             <Box sx={{ position: "relative" }}>
-              <img src={homeFeatureImg} width="100%" alt="Feature img" />
+              <img src={homeFeatureImg} width="100%" alt="Baseball Feature" />
               <Box
                 sx={{
                   position: "absolute",
@@ -58,38 +58,38 @@ const Feature = () => {
                 }}
               >
                 <Typography variant="h5" sx={{ mb: 1 }}>
-                  Lorem ipsum dolor
+                  Baseball Insights
                 </Typography>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle1" color="text.secondary">
-                    UI/UI Design
+                    Real-time Game Updates
                   </Typography>
                   <BorderLinearProgress
                     variant="determinate"
                     color="inherit"
-                    value={65}
+                    value={85}
                     order={1}
                   />
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle1" color="text.secondary">
-                    Mobile Development
+                    Player Statistics
                   </Typography>
                   <BorderLinearProgress
                     variant="determinate"
                     color="inherit"
-                    value={40}
+                    value={70}
                     order={2}
                   />
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle1" color="text.secondary">
-                    Web Development
+                    Team Schedules
                   </Typography>
                   <BorderLinearProgress
                     variant="determinate"
                     color="inherit"
-                    value={50}
+                    value={60}
                     order={3}
                   />
                 </Box>
@@ -119,13 +119,13 @@ const Feature = () => {
                   }}
                 >
                   <Typography sx={{ fontWeight: 600, lineHeight: 1 }}>
-                    Lorem ipsum
+                    Fan Community
                   </Typography>
                   <Typography
                     variant="subtitle1"
                     sx={{ mb: 1, color: "text.disabled" }}
                   >
-                    Lorem ipsum
+                    Join the discussion
                   </Typography>
                   <Box
                     sx={{
@@ -138,19 +138,19 @@ const Feature = () => {
                     }}
                   >
                     <Typography variant="h4" sx={{ color: "#32dc88" }}>
-                      75%
+                      90%
                     </Typography>
                     <CircularProgress
                       sx={{ position: "absolute", color: "divider" }}
                       thickness={2}
                       variant="determinate"
-                      value={85}
+                      value={95}
                       size={85}
                     />
                     <CircularProgress
                       thickness={2}
                       variant="determinate"
-                      value={75}
+                      value={90}
                       size={85}
                       sx={{
                         transform: "rotate(96deg) !important",
@@ -176,7 +176,7 @@ const Feature = () => {
                 fontWeight: "bold",
               }}
             >
-              Make your{" "}
+              Enhance your{" "}
               <Typography
                 component="mark"
                 sx={{
@@ -187,17 +187,17 @@ const Feature = () => {
                   backgroundColor: "unset",
                 }}
               >
-                Learning <br />
+                Baseball Experience {" "}
               </Typography>
-              Enjoyable
+              with Us
             </Typography>
 
             <Typography
               sx={{ color: "text.secondary", mb: 2, ml: { xs: 0, md: 4 } }}
             >
-              Set the way of learning according to your wishes with some of the
-              benefits that you get us, so you on enjoy the lessons that we
-              provide.
+              Dive into the world of baseball with real-time updates, player
+              stats, and community discussions. Enjoy the game like never
+              before.
             </Typography>
 
             <Grid container spacing={2} sx={{ ml: { xs: 0, md: 2 } }}>

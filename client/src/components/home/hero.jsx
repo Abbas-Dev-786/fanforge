@@ -184,13 +184,13 @@ const Hero = () => {
                     mb: 0.5,
                   }}
                 >
-                  Certificate
+                  Stats
                 </Typography>
                 <Typography
                   variant="subtitle1"
                   sx={{ color: "text.secondary", lineHeight: 1.3 }}
                 >
-                  There are certificates for all courses.
+                  There are stats for matches.
                 </Typography>
               </Box>
             </Box>

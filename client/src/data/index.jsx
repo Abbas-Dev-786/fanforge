@@ -4,62 +4,62 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 export const navigations = [
-  {
-    label: "Home",
-    path: "#", // '/',
-  },
-  {
-    label: "Courses",
-    path: "popular-course", // '/popular-course',
-  },
-  {
-    label: "Testimonial",
-    path: "testimonial", // '/testimonial',
-  },
-  {
-    label: "Mentor",
-    path: "mentors", // '/mentors',
-  },
+  // {
+  //   label: "Home",
+  //   path: "#", // '/',
+  // },
+  // {
+  //   label: "Courses",
+  //   path: "popular-course", // '/popular-course',
+  // },
+  // {
+  //   label: "Testimonial",
+  //   path: "testimonial", // '/testimonial',
+  // },
+  // {
+  //   label: "Mentor",
+  //   path: "mentors", // '/mentors',
+  // },
 ];
 
 export const expsHero = [
   {
-    label: "Students",
-    value: "10K+",
-  },
-  {
-    label: "Quality Course",
-    value: "20+",
-  },
-  {
-    label: "Experience Mentors",
+    label: "Teams",
     value: "10+",
+  },
+  {
+    label: "Quality Highlights",
+    value: "20k+",
+  },
+  {
+    label: "Amazing Stats",
+    value: "10k+",
   },
 ];
 
 export const featureData = [
   {
-    title: "Easy Accessable",
+    title: "Real-time Game Updates",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore",
+      "Stay updated with live scores and play-by-play commentary for every game.",
     icon: <ArtTrackIcon />,
   },
   {
-    title: "More Affordable Cost",
+    title: "Player Statistics",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore",
+      "Access detailed statistics for every player, including batting averages and pitching records.",
     icon: <AttachMoneyIcon />,
   },
   {
-    title: "Flexible Study Time",
+    title: "Team Schedules",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore",
+      "View upcoming game schedules and never miss a match of your favorite team.",
     icon: <LocalLibraryIcon />,
   },
   {
-    title: "Consultation With Mentor",
+    title: "Fan Community",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore",
+      "Join discussions with other fans and share your thoughts on the latest games.",
     icon: <ContactSupportIcon />,
   },
 ];
