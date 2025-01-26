@@ -1,24 +1,6 @@
+import { navigations } from "@/data";
 import Box from "@mui/material/Box";
 import { Link as ScrollLink } from "react-scroll";
-
-const navigations = [
-  {
-    label: "Home",
-    path: "#", // '/',
-  },
-  {
-    label: "Courses",
-    path: "popular-course", // '/popular-course',
-  },
-  {
-    label: "Testimonial",
-    path: "testimonial", // '/testimonial',
-  },
-  {
-    label: "Mentor",
-    path: "mentors", // '/mentors',
-  },
-];
 
 const Navigation = () => {
   return (

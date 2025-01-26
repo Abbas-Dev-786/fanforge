@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import { Menu, Close } from "@mui/icons-material";
 import Logo from "./logo";
 import Navigation from "./navigation";
+import { Button } from "@mui/material";
 
 const Navbar = () => {
   const [visibleMenu, setVisibleMenu] = useState(false);
@@ -51,7 +52,15 @@ const Navbar = () => {
           >
             <Box /> {/* Magic space */}
             <Navigation />
-            <Box sx={{ "& button:first-of-type": { mr: 2 } }}></Box>
+            <Box sx={{ "& button": { ml: 2 } }}>
+              <Button color="primary" size="small" variant="contained">
+                Login
+              </Button>
+              <Button color="primary" size="small" variant="outlined">
+                Register
+              </Button>
+            </Box>
+            {/* <Box sx={{ "& button:first-of-type": { mr: 2 } }}></Box> */}
             {visibleMenu && matchMobileView && (
               <IconButton
                 sx={{
