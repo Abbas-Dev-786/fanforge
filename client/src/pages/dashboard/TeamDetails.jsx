@@ -27,6 +27,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
+import BaseballField from "../../components/teams/BaseballField";
 
 const positions = {
   Pitcher: "P",
@@ -114,6 +115,18 @@ export default function TeamDetails() {
                   </Box>
                 </Box>
               </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Field Visualization */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Field Positions
+              </Typography>
+              <BaseballField roster={roster} />
             </CardContent>
           </Card>
         </Grid>

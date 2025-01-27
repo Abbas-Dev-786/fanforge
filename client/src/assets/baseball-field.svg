@@ -1,0 +1,46 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#2e7d32" /> <!-- Dark green outfield -->
+  
+  <!-- Infield dirt -->
+  <path d="M250,500 L400,250 L550,500 Z" fill="#b87a3d" />
+  
+  <!-- Infield grass -->
+  <path d="M300,500 L400,300 L500,500" fill="#4caf50" />
+  
+  <!-- Base lines -->
+  <path d="M250,500 L400,250 L550,500" fill="none" stroke="white" stroke-width="3" />
+  <path d="M250,500 L550,500" fill="none" stroke="white" stroke-width="3" />
+  
+  <!-- Pitcher's mound -->
+  <circle cx="400" cy="400" r="15" fill="#b87a3d" stroke="white" stroke-width="2" />
+  
+  <!-- Home plate -->
+  <path d="M385,500 L400,515 L415,500 L415,490 L385,490 Z" fill="white" />
+  
+  <!-- Bases -->
+  <rect x="395" y="290" width="10" height="10" fill="white" transform="rotate(45 400 295)" /> <!-- Second base -->
+  <rect x="540" y="490" width="10" height="10" fill="white" transform="rotate(45 545 495)" /> <!-- First base -->
+  <rect x="250" y="490" width="10" height="10" fill="white" transform="rotate(45 255 495)" /> <!-- Third base -->
+  
+  <!-- Infield arc -->
+  <path d="M250,500 Q400,350 550,500" fill="none" stroke="white" stroke-width="2" stroke-dasharray="5,5" />
+  
+  <!-- Outfield lines -->
+  <path d="M250,500 L150,200" fill="none" stroke="white" stroke-width="2" />
+  <path d="M550,500 L650,200" fill="none" stroke="white" stroke-width="2" />
+  
+  <!-- Warning track -->
+  <path d="M150,200 Q400,100 650,200" fill="none" stroke="#cc8e35" stroke-width="15" />
+  
+  <!-- Foul poles -->
+  <line x1="150" y1="200" x2="150" y2="150" stroke="yellow" stroke-width="3" />
+  <line x1="650" y1="200" x2="650" y2="150" stroke="yellow" stroke-width="3" />
+  
+  <!-- Batter's boxes -->
+  <rect x="360" y="500" width="15" height="30" fill="none" stroke="white" stroke-width="2" />
+  <rect x="425" y="500" width="15" height="30" fill="none" stroke="white" stroke-width="2" />
+  
+  <!-- Catcher's box -->
+  <path d="M385,530 L415,530 L415,550 L385,550 Z" fill="none" stroke="white" stroke-width="2" />
+</svg> 
