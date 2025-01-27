@@ -1,10 +1,11 @@
 import { CssBaseline } from "@mui/material";
 import { Route, Routes } from "react-router";
-import Home from "./pages/Home";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import Login from "./pages/auth/Login";
-import NormalLayout from "./layouts/normal-layout";
 import Register from "./pages/auth/Register";
+import Onboarding from "./pages/auth/Onboarding";
+import NormalLayout from "./layouts/normal-layout";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
     </AuthContextProvider>
   );
