@@ -16,6 +16,7 @@ const NotFound = lazy(() => import("./pages/error/NotFound"));
 const Forbidden = lazy(() => import("./pages/error/Forbidden"));
 const Teams = lazy(() => import("./pages/dashboard/Teams"));
 const TeamDetails = lazy(() => import("./pages/dashboard/TeamDetails"));
+const PlayerDetails = lazy(() => import("./pages/dashboard/PlayerDetails"));
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="teams" element={<Teams />} />
             <Route path="teams/:teamId" element={<TeamDetails />} />
+            <Route path="players/:playerId" element={<PlayerDetails />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

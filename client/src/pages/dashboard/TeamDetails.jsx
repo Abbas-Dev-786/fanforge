@@ -28,6 +28,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import BaseballField from "../../components/teams/BaseballField";
+import { useNavigate } from "react-router";
 
 const positions = {
   Pitcher: "P",
@@ -38,6 +39,7 @@ const positions = {
 
 export default function TeamDetails() {
   const { teamId } = useParams();
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(0);
   const [positionFilter, setPositionFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,6 +77,10 @@ export default function TeamDetails() {
     setPositionFilter(
       newValue === 0 ? "all" : Object.keys(positions)[newValue - 1]
     );
+  };
+
+  const handlePlayerClick = (playerId) => {
+    navigate(`/dashboard/players/${playerId}`);
   };
 
   return (
@@ -181,7 +187,16 @@ export default function TeamDetails() {
                 </TableHead>
                 <TableBody>
                   {filteredRoster.map((player) => (
-                    <TableRow key={player.person.id}>
+                    <TableRow
+                      key={player.person.id}
+                      onClick={() => handlePlayerClick(player.person.id)}
+                      sx={{
+                        cursor: "pointer",
+                        "&:hover": {
+                          backgroundColor: "rgba(0, 0, 0, 0.04)",
+                        },
+                      }}
+                    >
                       <TableCell>
                         <Avatar
                           src={`https://img.mlbstatic.com/mlb/images/players/head_shot/${player.person.id}.jpg`}
