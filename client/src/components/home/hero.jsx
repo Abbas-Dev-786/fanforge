@@ -136,7 +136,7 @@ const Hero = () => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12} md={5} sx={{ position: "relative" }}>
+          <Grid item xs={12} md={5} sx={{ position: "relative", mt: 10 }}>
             {/* Certificate badge */}
             <Box
               sx={{
@@ -152,6 +152,9 @@ const Hero = () => {
                 display: "flex",
                 alignItems: "flex-start",
                 width: 280,
+                "@media (max-width: 900px)": {
+                  display: "none",
+                },
               }}
             >
               <Box
@@ -201,7 +204,7 @@ const Hero = () => {
         </Grid>
 
         {/* Experience */}
-        <Box sx={{ boxShadow: 2, py: 4, px: 7, borderRadius: 4 }}>
+        <Box sx={{ boxShadow: 2, py: 4, px: 7, borderRadius: 4, mt: 5 }}>
           <Grid container spacing={2}>
             {expsHero.map((item) => (
               <Grid key={item.value} item xs={12} md={4}>

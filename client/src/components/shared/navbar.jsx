@@ -1,83 +1,309 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import { Menu, Close } from "@mui/icons-material";
-import Logo from "./logo";
-import Navigation from "./navigation";
-import { Button } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+  Avatar,
+  Tooltip,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+  Divider,
+  Container,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../contexts/AuthContext";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const Navbar = () => {
-  const [visibleMenu, setVisibleMenu] = useState(false);
-  const { breakpoints } = useTheme();
-  const matchMobileView = useMediaQuery(breakpoints.down("md"));
+export default function Navbar() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  return (
-    <Box sx={{ backgroundColor: "background.paper" }}>
-      <Container sx={{ py: { xs: 2, md: 3 } }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Logo />
-          <Box sx={{ ml: "auto", display: { xs: "inline-flex", md: "none" } }}>
-            <IconButton onClick={() => setVisibleMenu(!visibleMenu)}>
-              <Menu />
-            </IconButton>
-          </Box>
-          <Box
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      handleCloseMenu();
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
+  };
+
+  const handleProfile = () => {
+    handleCloseMenu();
+    navigate("/profile");
+  };
+
+  const navigationLinks = [
+    { text: "Home", path: "/" },
+    { text: "About", path: "/about" },
+    { text: "Services", path: "/services" },
+    // Add more navigation links as needed
+  ];
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h5" sx={{ my: 2 }}>
+        FanForge
+      </Typography>
+      <Divider />
+      <List>
+        {navigationLinks.map((item) => (
+          <ListItem
+            key={item.text}
+            component={Link}
+            to={item.path}
             sx={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: { xs: "column", md: "row" },
-
-              transition: (theme) => theme.transitions.create(["top"]),
-              ...(matchMobileView && {
-                py: 6,
-                backgroundColor: "background.paper",
-                zIndex: "appBar",
-                position: "fixed",
-                height: { xs: "100vh", md: "auto" },
-                top: visibleMenu ? 0 : "-120vh",
-                left: 0,
-              }),
+              textAlign: "center",
+              textDecoration: "none",
+              color: "inherit",
             }}
           >
-            <Box /> {/* Magic space */}
-            <Navigation />
-            <Box sx={{ "& button": { ml: 2 } }}>
-              <Button color="primary" size="small" variant="contained">
-                Login
-              </Button>
-              <Button color="primary" size="small" variant="outlined">
-                Register
-              </Button>
-            </Box>
-            {/* <Box sx={{ "& button:first-of-type": { mr: 2 } }}></Box> */}
-            {visibleMenu && matchMobileView && (
-              <IconButton
-                sx={{
-                  position: "fixed",
-                  top: 10,
-                  right: 10,
-                }}
-                onClick={() => setVisibleMenu(!visibleMenu)}
-              >
-                <Close />
-              </IconButton>
-            )}
-          </Box>
-        </Box>
-      </Container>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+        {!currentUser ? (
+          <>
+            <ListItem
+              component={Link}
+              to="/login"
+              sx={{
+                textAlign: "center",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <ListItemText primary="Login" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/register"
+              sx={{
+                textAlign: "center",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <ListItemText primary="Register" />
+            </ListItem>
+          </>
+        ) : (
+          <>
+            <ListItem
+              onClick={handleProfile}
+              sx={{ textAlign: "center", cursor: "pointer" }}
+            >
+              <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem
+              onClick={handleLogout}
+              sx={{ textAlign: "center", cursor: "pointer" }}
+            >
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </>
+        )}
+      </List>
     </Box>
   );
-};
 
-export default Navbar;
+  return (
+    <>
+      <AppBar
+        position="sticky"
+        color="default"
+        elevation={1}
+        sx={{ borderBottom: "1px solid #ddd" }}
+      >
+        <Container maxWidth="lg">
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            {/* Logo/Brand */}
+            <Typography
+              variant="h4"
+              component={Link}
+              to="/"
+              sx={{
+                textDecoration: "none",
+                color: "inherit",
+                fontWeight: 800,
+              }}
+            >
+              FanForge
+            </Typography>
+
+            {/* Navigation Links - Desktop */}
+            {!isMobile && (
+              <Box
+                sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}
+              >
+                {navigationLinks.map((link) => (
+                  <Button
+                    key={link.text}
+                    color="inherit"
+                    component={Link}
+                    to={link.path}
+                    sx={{ mx: 1 }}
+                  >
+                    {link.text}
+                  </Button>
+                ))}
+              </Box>
+            )}
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 2,
+              }}
+            >
+              {/* Auth Section - Desktop */}
+              {
+                <Box>
+                  {currentUser ? (
+                    <>
+                      <Tooltip title="Account settings">
+                        <IconButton onClick={handleOpenMenu}>
+                          <Avatar
+                            alt={currentUser.email}
+                            src={currentUser.photoURL}
+                            sx={{ width: 32, height: 32 }}
+                          >
+                            {currentUser.email?.charAt(0).toUpperCase()}
+                          </Avatar>
+                        </IconButton>
+                      </Tooltip>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleCloseMenu}
+                        onClick={handleCloseMenu}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                        PaperProps={{
+                          elevation: 0,
+                          sx: {
+                            overflow: "visible",
+                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                            mt: 1.5,
+                            "& .MuiAvatar-root": {
+                              width: 32,
+                              height: 32,
+                              ml: -0.5,
+                              mr: 1,
+                            },
+                            "&:before": {
+                              content: '""',
+                              display: "block",
+                              position: "absolute",
+                              top: 0,
+                              right: 14,
+                              width: 10,
+                              height: 10,
+                              bgcolor: "background.paper",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              zIndex: 0,
+                            },
+                          },
+                        }}
+                      >
+                        <MenuItem onClick={handleProfile}>
+                          <Typography>Profile</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>
+                          <Typography>Logout</Typography>
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  ) : (
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      <Button
+                        color="inherit"
+                        component={Link}
+                        to="/login"
+                        variant="outlined"
+                      >
+                        Login
+                      </Button>
+                      {!isMobile && (
+                        <Button
+                          color="primary"
+                          component={Link}
+                          to="/register"
+                          variant="contained"
+                        >
+                          Register
+                        </Button>
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              }
+
+              {/* Hamburger Menu for Mobile */}
+              {isMobile && (
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        anchor="left"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
+        }}
+      >
+        {drawer}
+      </Drawer>
+    </>
+  );
+}

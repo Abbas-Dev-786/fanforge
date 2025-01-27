@@ -1,19 +1,23 @@
 import { CssBaseline } from "@mui/material";
 import { Route, Routes } from "react-router";
 import Home from "./pages/Home";
-import Navbar from "./components/shared/navbar";
-import Footer from "./components/shared/footer";
+import { AuthContextProvider } from "./contexts/AuthContext";
+import Login from "./pages/auth/Login";
+import NormalLayout from "./layouts/normal-layout";
+import Register from "./pages/auth/Register";
 
 const App = () => {
   return (
-    <>
+    <AuthContextProvider>
       <CssBaseline />
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<NormalLayout />}>
+          <Route index element={<Home />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
-      <Footer />
-    </>
+    </AuthContextProvider>
   );
 };
 
