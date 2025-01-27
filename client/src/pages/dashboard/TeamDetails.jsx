@@ -171,6 +171,7 @@ export default function TeamDetails() {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Image</TableCell>
                     <TableCell>#</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Position</TableCell>
@@ -181,6 +182,13 @@ export default function TeamDetails() {
                 <TableBody>
                   {filteredRoster.map((player) => (
                     <TableRow key={player.person.id}>
+                      <TableCell>
+                        <Avatar
+                          src={`https://img.mlbstatic.com/mlb/images/players/head_shot/${player.person.id}.jpg`}
+                          alt={player.person.fullName}
+                          sx={{ width: 50, height: 50 }}
+                        />
+                      </TableCell>
                       <TableCell>{player.jerseyNumber || "—"}</TableCell>
                       <TableCell>
                         <Typography variant="subtitle2">
