@@ -6,10 +6,10 @@ import {
   Box,
   Chip,
   IconButton,
-  Link,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { Link, useNavigate } from "react-router";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: "100%",
@@ -23,20 +23,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const ColorBox = styled(Box)(({ bgcolor }) => ({
-  width: 24,
-  height: 24,
-  borderRadius: "50%",
-  backgroundColor: `#${bgcolor}`,
-  border: "2px solid white",
-  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-}));
-
 export default function TeamCard({ team }) {
+  const navigate = useNavigate();
   const logoUrl = `https://www.mlbstatic.com/team-logos/${team?.id}.svg`;
 
+  const handleClick = () => {
+    navigate(`/dashboard/teams/${team.id}`);
+  };
+
   return (
-    <StyledCard>
+    <StyledCard onClick={handleClick} sx={{ cursor: "pointer" }}>
       <CardMedia
         component="img"
         height="200"
@@ -49,7 +45,7 @@ export default function TeamCard({ team }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {team?.name}
           </Typography>
-          <Link href={team?.link} target="_blank" rel="noopener">
+          <Link to={`/dashboard/teams/${team?.id}`}>
             <IconButton size="small">
               <OpenInNewIcon />
             </IconButton>

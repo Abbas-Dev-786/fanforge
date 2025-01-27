@@ -21,3 +21,11 @@ export const useTeam = (teamId) => {
     enabled: !!teamId,
   });
 };
+
+export const useTeamRoster = (teamId) => {
+  return useQuery({
+    queryKey: ["teamRoster", teamId],
+    queryFn: () => teamsService.getTeamRoster(teamId),
+    enabled: !!teamId,
+  });
+};
