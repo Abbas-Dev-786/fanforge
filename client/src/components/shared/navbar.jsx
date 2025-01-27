@@ -60,8 +60,7 @@ export default function Navbar() {
 
   const navigationLinks = [
     { text: "Home", path: "/" },
-    { text: "About", path: "/about" },
-    { text: "Services", path: "/services" },
+    { text: "Dashboard", path: "/dashboard" },
     // Add more navigation links as needed
   ];
 
