@@ -17,6 +17,7 @@ const Forbidden = lazy(() => import("./pages/error/Forbidden"));
 const Teams = lazy(() => import("./pages/dashboard/Teams"));
 const TeamDetails = lazy(() => import("./pages/dashboard/TeamDetails"));
 const PlayerDetails = lazy(() => import("./pages/dashboard/PlayerDetails"));
+const Highlights = lazy(() => import("./pages/dashboard/Highlights"));
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="teams" element={<Teams />} />
             <Route path="teams/:teamId" element={<TeamDetails />} />
             <Route path="players/:playerId" element={<PlayerDetails />} />
+            <Route path="highlights" element={<Highlights />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from '@mui/icons-material/Groups';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 const DRAWER_WIDTH = 280;
 
@@ -33,6 +34,11 @@ const navConfig = [
     title: "Teams",
     path: "/dashboard/teams",
     icon: <GroupsIcon />,
+  },
+  {
+    title: "Highlights",
+    path: "/dashboard/highlights",
+    icon: <OndemandVideoIcon />,
   },
 ];
 
