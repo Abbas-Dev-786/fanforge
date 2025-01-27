@@ -14,6 +14,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/error/NotFound"));
 const Forbidden = lazy(() => import("./pages/error/Forbidden"));
+const Teams = lazy(() => import("./pages/dashboard/Teams"));
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<h1>Main page</h1>} />
             <Route path="profile" element={<Profile />} />
+            <Route path="teams" element={<Teams />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

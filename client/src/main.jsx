@@ -4,13 +4,18 @@ import "./index.css";
 import App from "./App.jsx";
 import MUIProvider from "./providers/mui-provider.jsx";
 import { BrowserRouter } from "react-router";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <MUIProvider>
-        <App />
-      </MUIProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <MUIProvider>
+          <App />
+        </MUIProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   </StrictMode>
 );

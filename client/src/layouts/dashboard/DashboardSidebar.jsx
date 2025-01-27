@@ -12,6 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const DRAWER_WIDTH = 280;
 
@@ -27,6 +28,11 @@ const navConfig = [
     title: "Profile",
     path: "/dashboard/profile",
     icon: <PersonIcon />,
+  },
+  {
+    title: "Teams",
+    path: "/dashboard/teams",
+    icon: <GroupsIcon />,
   },
 ];
 
