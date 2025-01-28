@@ -22,6 +22,9 @@ const RootStyle = styled("div")(({ theme }) => ({
     flexShrink: 0,
     width: DRAWER_WIDTH,
   },
+  [theme.breakpoints.down("lg")]: {
+    display: "none",
+  },
 }));
 
 const navConfig = [
