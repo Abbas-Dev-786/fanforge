@@ -9,22 +9,17 @@ import {
   Grid,
   Button,
   CircularProgress,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
+  Avatar,
+  Card,
+  CardMedia,
+  CardContent,
 } from "@mui/material";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import EditIcon from "@mui/icons-material/Edit";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import EditProfileModal from "../components/profile/EditProfileModal";
 
 const LANGUAGE_MAP = {
   en: "English",
@@ -33,61 +28,35 @@ const LANGUAGE_MAP = {
   de: "German",
 };
 
-const TEAMS = [
-  "New York Yankees",
-  "Boston Red Sox",
-  "Los Angeles Dodgers",
-  "Chicago Cubs",
-  "Houston Astros",
-  "Atlanta Braves",
-  "San Francisco Giants",
-  "St. Louis Cardinals",
-];
-
-const PLAYERS = [
-  "Shohei Ohtani",
-  "Mike Trout",
-  "Aaron Judge",
-  "Mookie Betts",
-  "Juan Soto",
-  "Ronald Acuña Jr.",
-  "Freddie Freeman",
-  "Trea Turner",
-];
-
 export default function Profile() {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [userPreferences, setUserPreferences] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [interests, setInterests] = useState(null);
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { reset } = useForm();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserPreferences = async () => {
+    const fetchInterests = async () => {
       try {
-        const userDoc = await getDoc(doc(db, "interests", currentUser.uid));
-        if (userDoc.exists()) {
-          setUserPreferences(userDoc.data());
+        const docRef = doc(db, "interests", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setInterests(docSnap.data());
         }
       } catch (error) {
-        console.error("Error fetching user preferences:", error);
+        console.error("Error fetching interests:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (currentUser) {
-      fetchUserPreferences();
-    }
-  }, [currentUser]);
+    fetchInterests();
+  }, [currentUser.uid]);
 
   const handleEditClick = () => {
     reset({
@@ -129,6 +98,23 @@ export default function Profile() {
     }
   };
 
+  const handleSaveProfile = async (newInterests) => {
+    try {
+      await setDoc(
+        doc(db, "interests", currentUser.uid),
+        {
+          ...interests,
+          ...newInterests,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+      setInterests((prev) => ({ ...prev, ...newInterests }));
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
   if (loading) {
     return (
       <Box
@@ -144,7 +130,7 @@ export default function Profile() {
     );
   }
 
-  if (!userPreferences) {
+  if (!interests) {
     return (
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Paper sx={{ p: 3, textAlign: "center" }}>
@@ -163,200 +149,109 @@ export default function Profile() {
     );
   }
 
-  const PreferenceSection = ({ title, items, chipColor = "primary" }) => (
-    <Box sx={{ mb: 4 }}>
-      <Typography variant="h6" gutterBottom>
-        {title}
-      </Typography>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-        {items?.map((item) => (
-          <Chip
-            key={item}
-            label={LANGUAGE_MAP[item] || item}
-            color={chipColor}
-            variant="outlined"
-          />
-        ))}
-      </Box>
-    </Box>
-  );
-
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 3,
-          }}
-        >
-          <Typography variant="h4" component="h1">
-            Your Profile
-          </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            onClick={handleEditClick}
+    <Container maxWidth="lg">
+      <Box sx={{ py: 4 }}>
+        <Paper sx={{ p: 3, mb: 4 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
           >
-            Edit Preferences
-          </Button>
-        </Box>
+            <Typography variant="h4">Profile</Typography>
+            <Button
+              variant="contained"
+              onClick={() => setEditModalOpen(true)}
+              startIcon={<EditIcon />}
+            >
+              Edit Preferences
+            </Button>
+          </Box>
 
-        <Divider sx={{ mb: 4 }} />
-
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <PreferenceSection
-              title="Favorite Teams"
-              items={userPreferences.favoriteTeams}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
+            <Avatar
+              src={currentUser.photoURL}
+              alt={currentUser.displayName}
+              sx={{ width: 80, height: 80 }}
             />
-            <PreferenceSection
-              title="Favorite Players"
-              items={userPreferences.favoritePlayers}
-              chipColor="secondary"
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <PreferenceSection
-              title="Content Preferences"
-              items={userPreferences.contentPreferences}
-              chipColor="info"
-            />
-            <PreferenceSection
-              title="Preferred Languages"
-              items={userPreferences.preferredLanguages?.map(
-                (code) => LANGUAGE_MAP[code] || code
-              )}
-              chipColor="success"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="h6" gutterBottom>
-                Notification Preferences
+            <Box>
+              <Typography variant="h5">{currentUser.displayName}</Typography>
+              <Typography color="text.secondary">
+                {currentUser.email}
               </Typography>
-              <Box sx={{ display: "flex", gap: 1 }}>
-                {Object.entries(
-                  userPreferences.notificationPreferences || {}
-                ).map(([key, value]) => (
-                  <Chip
-                    key={key}
-                    label={`${key.charAt(0).toUpperCase()}${key.slice(1)}: ${
-                      value ? "On" : "Off"
-                    }`}
-                    color={value ? "success" : "default"}
-                    variant="outlined"
-                  />
-                ))}
-              </Box>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
 
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="body2" color="text.secondary">
-            Last updated: {new Date(userPreferences.updatedAt).toLocaleString()}
+          <Typography variant="h6" gutterBottom>
+            Favorite Teams
           </Typography>
-        </Box>
+          <Grid container spacing={2} sx={{ mb: 4 }}>
+            {interests?.favoriteTeams?.map((team) => (
+              <Grid item xs={6} sm={4} md={3} key={team.id}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={`https://www.mlbstatic.com/team-logos/${team.id}.svg`}
+                    alt={team.name}
+                    sx={{ objectFit: "contain", p: 2, bgcolor: "#f5f5f5" }}
+                  />
+                  <CardContent>
+                    <Typography variant="body1" align="center">
+                      {team.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
 
-        <Dialog
-          open={isEditModalOpen}
-          onClose={handleCloseModal}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>Edit Preferences</DialogTitle>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <DialogContent>
-              <Controller
-                name="favoriteTeams"
-                control={control}
-                rules={{ required: "Please select at least one team" }}
-                render={({ field }) => (
-                  <FormControl
-                    fullWidth
-                    margin="normal"
-                    error={!!errors.favoriteTeams}
-                  >
-                    <InputLabel>Favorite Teams</InputLabel>
-                    <Select
-                      {...field}
-                      multiple
-                      renderValue={(selected) => (
-                        <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                        >
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
-                    >
-                      {TEAMS.map((team) => (
-                        <MenuItem key={team} value={team}>
-                          {team}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      {errors.favoriteTeams?.message}
-                    </FormHelperText>
-                  </FormControl>
-                )}
-              />
+          <Typography variant="h6" gutterBottom>
+            Favorite Players
+          </Typography>
+          <Grid container spacing={2}>
+            {interests?.favoritePlayers?.map((player) => (
+              <Grid item xs={6} sm={4} md={3} key={player.id}>
+                <Card>
+                  <Box sx={{ p: 2, textAlign: "center" }}>
+                    <Avatar
+                      src={`https://img.mlbstatic.com/mlb/images/players/head_shot/${player.id}.jpg`}
+                      alt={player.name}
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        margin: "0 auto",
+                        mb: 2,
+                        border: "2px solid",
+                        borderColor: "divider",
+                      }}
+                    />
+                    <Typography variant="body1" gutterBottom>
+                      {player.name}
+                    </Typography>
+                    <Chip
+                      label={player.position}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Box>
 
-              <Controller
-                name="favoritePlayers"
-                control={control}
-                rules={{ required: "Please select at least one player" }}
-                render={({ field }) => (
-                  <FormControl
-                    fullWidth
-                    margin="normal"
-                    error={!!errors.favoritePlayers}
-                  >
-                    <InputLabel>Favorite Players</InputLabel>
-                    <Select
-                      {...field}
-                      multiple
-                      renderValue={(selected) => (
-                        <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                        >
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
-                    >
-                      {PLAYERS.map((player) => (
-                        <MenuItem key={player} value={player}>
-                          {player}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      {errors.favoritePlayers?.message}
-                    </FormHelperText>
-                  </FormControl>
-                )}
-              />
-
-              {/* Add more form fields for other preferences as needed */}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseModal}>Cancel</Button>
-              <Button type="submit" variant="contained">
-                Save Changes
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </Paper>
+      <EditProfileModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSave={handleSaveProfile}
+        currentInterests={interests}
+      />
     </Container>
   );
 }
