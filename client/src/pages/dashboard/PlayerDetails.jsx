@@ -64,17 +64,19 @@ export default function PlayerDetails() {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
-                gap: 4,
-                p: 4,
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "center", sm: "center" },
+                gap: { xs: 2, sm: 4 },
+                p: { xs: 3, sm: 4 },
+                textAlign: { xs: "center", sm: "left" },
               }}
             >
               <Avatar
                 src={`https://img.mlbstatic.com/mlb/images/players/head_shot/${player.id}.jpg`}
                 alt={player.fullName}
                 sx={{
-                  width: 160,
-                  height: 160,
+                  width: { xs: 120, sm: 160 },
+                  height: { xs: 120, sm: 160 },
                   border: "4px solid rgba(255, 255, 255, 0.8)",
                   boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                 }}
@@ -82,7 +84,14 @@ export default function PlayerDetails() {
 
               <Box>
                 <Box sx={{ mb: 2 }}>
-                  <Typography variant="h3" sx={{ fontWeight: 600, mb: 1 }}>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 600,
+                      mb: 1,
+                      fontSize: { xs: "2rem", sm: "3rem" },
+                    }}
+                  >
                     {player.fullName}
                   </Typography>
                   {player.nickName && (
@@ -92,7 +101,14 @@ export default function PlayerDetails() {
                   )}
                 </Box>
 
-                <Box sx={{ display: "flex", gap: 1.5 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1.5,
+                    flexWrap: "wrap",
+                    justifyContent: { xs: "center", sm: "flex-start" },
+                  }}
+                >
                   <Chip
                     icon={<SportsBaseballIcon />}
                     label={player.primaryPosition.name}
