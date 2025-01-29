@@ -12,8 +12,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import GroupsIcon from '@mui/icons-material/Groups';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import GroupsIcon from "@mui/icons-material/Groups";
+import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
+import { Dashboard } from "@mui/icons-material";
 
 const DRAWER_WIDTH = 280;
 
@@ -28,6 +29,11 @@ const RootStyle = styled("div")(({ theme }) => ({
 }));
 
 const navConfig = [
+  {
+    title: "Dashboard",
+    path: "/dashboard",
+    icon: <Dashboard />,
+  },
   {
     title: "Profile",
     path: "/dashboard/profile",

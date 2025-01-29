@@ -5,6 +5,7 @@ import { AuthContextProvider } from "./contexts/AuthContext";
 import NormalLayout from "./layouts/normal-layout";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/dashboard";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 // Lazy load components
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -31,7 +32,7 @@ const App = () => {
           </Route>
 
           <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<h1>Main page</h1>} />
+            <Route index element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
             <Route path="teams" element={<Teams />} />
             <Route path="teams/:teamId" element={<TeamDetails />} />
