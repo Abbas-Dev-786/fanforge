@@ -1,6 +1,7 @@
 import axiosInstance from "../api/axios";
 
 const MLB_STATS_API_BASE_URL = "https://statsapi.mlb.com/api/v1";
+const MLB_STATS_API_BASE_URL_2 = "https://statsapi.mlb.com/api/v1.1";
 
 class MLBService {
   // Get team information
@@ -56,7 +57,7 @@ class MLBService {
   // Get game feed/live data
   async getGameFeed(gamePk) {
     return axiosInstance.get(
-      `${MLB_STATS_API_BASE_URL}/game/${gamePk}/feed/live`
+      `${MLB_STATS_API_BASE_URL_2}/game/${gamePk}/feed/live`
     );
   }
 }

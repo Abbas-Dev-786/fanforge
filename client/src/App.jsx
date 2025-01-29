@@ -6,6 +6,7 @@ import NormalLayout from "./layouts/normal-layout";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/dashboard";
 import Dashboard from "./pages/dashboard/Dashboard";
+import MatchDetails from "./pages/dashboard/MatchDetails";
 
 // Lazy load components
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="teams/:teamId" element={<TeamDetails />} />
             <Route path="players/:playerId" element={<PlayerDetails />} />
             <Route path="highlights" element={<Highlights />} />
+            <Route path="match/:gameId" element={<MatchDetails />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

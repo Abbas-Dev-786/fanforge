@@ -20,6 +20,7 @@ import {
 import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import mlbService from "../../services/mlb.service";
+import { useNavigate } from "react-router";
 
 // Custom TabPanel component for standings
 function TabPanel({ children, value, index, ...other }) {
@@ -43,6 +44,7 @@ TabPanel.propTypes = {
 
 const Dashboard = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const today = format(new Date(), "yyyy-MM-dd");
   const currentYear = new Date().getFullYear();
   const [selectedSeason, setSelectedSeason] = useState(currentYear);
@@ -139,7 +141,6 @@ const Dashboard = () => {
         />
         <CardContent>
           <Grid container spacing={2}>
-            {console.log(scheduleData)}
             {scheduleData?.map(({ games }) => {
               const game = games[0];
 
@@ -147,6 +148,7 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={6} md={4} key={game.gamePk}>
                   <Paper
                     elevation={2}
+                    onClick={() => navigate(`/dashboard/match/${game.gamePk}`)}
                     sx={{
                       p: 2,
                       background: theme.palette.background.paper,
@@ -155,9 +157,11 @@ const Dashboard = () => {
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
-                      transition: "transform 0.2s",
+                      transition: "all 0.2s",
+                      cursor: "pointer",
                       "&:hover": {
-                        transform: "translateY(-2px)",
+                        transform: "translateY(-4px)",
+                        boxShadow: theme.shadows[4],
                       },
                     }}
                   >
