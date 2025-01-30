@@ -184,18 +184,20 @@ export default function PlayerDetails() {
                 />
               </ListItem>
               <Divider variant="inset" component="li" />
-              <ListItem>
-                <ListItemIcon>
-                  <CalendarTodayIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="MLB Debut"
-                  secondary={format(
-                    new Date(player.mlbDebutDate),
-                    "MMMM d, yyyy"
-                  )}
-                />
-              </ListItem>
+              {player?.mlbDebutDate && (
+                <ListItem>
+                  <ListItemIcon>
+                    <CalendarTodayIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="MLB Debut"
+                    secondary={format(
+                      new Date(player?.mlbDebutDate),
+                      "MMMM d, yyyy"
+                    )}
+                  />
+                </ListItem>
+              )}
             </List>
           </Paper>
         </Grid>
