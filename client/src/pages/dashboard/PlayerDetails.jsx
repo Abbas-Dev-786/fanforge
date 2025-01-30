@@ -24,6 +24,7 @@ import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import SportsBaseballIcon from "@mui/icons-material/SportsBaseball";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { format } from "date-fns";
+import PlayerChat from "../../components/chat/PlayerChat";
 
 export default function PlayerDetails() {
   const { playerId } = useParams();
@@ -260,6 +261,11 @@ export default function PlayerDetails() {
               )}
             </Grid>
           </Paper>
+        </Grid>
+
+        {/* Player Chat */}
+        <Grid item xs={12}>
+          <PlayerChat player={player} />
         </Grid>
       </Grid>
     </Container>
