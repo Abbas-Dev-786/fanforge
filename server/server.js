@@ -4,6 +4,7 @@ const fetch = require("node-fetch");
 const https = require("https");
 const { JWT } = require("google-auth-library");
 const cors = require("cors");
+const { BigQuery } = require("@google-cloud/bigquery");
 const app = express();
 
 app.use(cors({ origin: "*" }));
@@ -20,6 +21,15 @@ const authClient = new JWT({
   email: serviceAccount.client_email,
   key: serviceAccount.private_key,
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
+});
+
+// Initialize BigQuery client
+const bigquery = new BigQuery({
+  credentials: {
+    client_email: serviceAccount.client_email,
+    private_key: serviceAccount.private_key,
+  },
+  projectId: "883391227520", // Using the same project ID from your Discovery Engine
 });
 
 app.get("/health", (req, res) => {
@@ -71,6 +81,29 @@ app.post("/recommend", async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error("Error in /recommend:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Random row endpoint
+app.get("/start-id", async (req, res) => {
+  try {
+    const query = `
+      SELECT *
+      FROM mlb_home_runs.home_runs
+      ORDER BY RAND()
+      LIMIT 1
+    `;
+
+    const [rows] = await bigquery.query(query);
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: "No records found" });
+    }
+
+    res.json({ id: rows[0]?.id });
+  } catch (error) {
+    console.error("Error in /random-homerun:", error);
     res.status(500).json({ error: error.message });
   }
 });
