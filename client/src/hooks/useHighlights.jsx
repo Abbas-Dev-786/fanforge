@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "./useAuth";
 
 const API_URL =
-  "https://discoveryengine.googleapis.com/v1beta/projects/883391227520/locations/global/collections/default_collection/engines/mlb-homerun-engine_1738330462681/servingConfigs/mlb-homerun-engine_1738330462681:recommend";
+  "https://mlb-hackathon-883391227520.us-central1.run.app/recommend";
 
 export function useHighlights(initialDocumentId = null) {
   const [highlights, setHighlights] = useState([]);
@@ -19,7 +19,6 @@ export function useHighlights(initialDocumentId = null) {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_GOOGLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
