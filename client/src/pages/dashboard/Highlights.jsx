@@ -19,7 +19,11 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useAuth } from "../../hooks/useAuth";
 import { useHighlights } from "../../hooks/useHighlights";
 import { useTheme } from "@emotion/react";
-import { translateText } from "../../services/translate.service";
+import {
+  translateText,
+  translateAudio,
+} from "../../services/translate.service";
+import { useQuery } from "@tanstack/react-query";
 
 const VideoContainer = styled(Box)(({ theme }) => ({
   height: "100vh",
@@ -157,61 +161,50 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [translatedTitle, setTranslatedTitle] = useState(highlight.title);
+  const [isTranslatingAudio, setIsTranslatingAudio] = useState(false);
+  const [translatedAudioUrl, setTranslatedAudioUrl] = useState("");
+  const [translatedText, setTranslatedText] = useState("");
   const { user } = useAuth();
 
   useEffect(() => {
-    const translateContent = async () => {
+    const handleAudioTranslation = async () => {
       if (selectedLanguage === "en") {
-        setTranslatedTitle(highlight.title);
+        setTranslatedAudioUrl("");
+        setTranslatedText("");
+        if (videoRef.current) {
+          videoRef.current.muted = false;
+        }
         return;
       }
+
       try {
-        const translated = await translateText(
-          highlight.title,
+        setIsTranslatingAudio(true);
+        const response = await translateAudio(
+          highlight.videoUrl,
           selectedLanguage
         );
-        setTranslatedTitle(translated);
+
+        // Get translated text and audio from response
+        const { translatedText, audioContent } = response;
+
+        // Convert base64 to audio URL
+        const audioUrl = `data:audio/mp3;base64,${audioContent}`;
+        setTranslatedAudioUrl(audioUrl);
+        setTranslatedText(translatedText);
+
+        // Mute original video audio
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+        }
       } catch (error) {
-        console.error("Translation error:", error);
+        console.error("Error translating audio:", error);
+      } finally {
+        setIsTranslatingAudio(false);
       }
     };
-    translateContent();
-  }, [highlight.title, selectedLanguage]);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      // Instead of autoplaying, just load the video
-      video.load();
-
-      // Add intersection observer to play/pause based on visibility
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              // Try to play when video is visible
-              video.play().catch((error) => {
-                // Handle autoplay error silently
-                console.debug("Autoplay prevented:", error);
-              });
-              setIsPlaying(true);
-            } else {
-              video.pause();
-              setIsPlaying(false);
-            }
-          });
-        },
-        { threshold: 0.5 } // 50% visibility threshold
-      );
-
-      observer.observe(video);
-
-      return () => {
-        observer.unobserve(video);
-        video.pause();
-      };
-    }
-  }, [highlight]);
+    handleAudioTranslation();
+  }, [selectedLanguage, highlight.videoUrl]);
 
   const handleVideoClick = () => {
     const video = videoRef.current;
@@ -273,6 +266,27 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
           onShare={handleShare}
           isLiked={isLiked}
         />
+        {isTranslatingAudio && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              zIndex: 2,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              bgcolor: "rgba(0, 0, 0, 0.5)",
+              color: "white",
+              borderRadius: 1,
+              px: 2,
+              py: 1,
+            }}
+          >
+            <CircularProgress size={20} color="inherit" />
+            <Typography variant="body2">Translating audio...</Typography>
+          </Box>
+        )}
       </VideoWrapper>
 
       <InfoPanel>
@@ -305,7 +319,7 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
         </Box>
         <Box>
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-            {translatedTitle}
+            {highlight.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {highlight.date}
@@ -320,10 +334,34 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
           </Typography>
           <Typography
             variant="body2"
-            sx={{ color: "text.secondary", lineHeight: 1.6 }}
+            sx={{ color: "text.secondary", lineHeight: 1.6, mb: 2 }}
           >
-            {highlight.description || "No description available"}
+            {selectedLanguage === "en"
+              ? highlight.description || "No description available"
+              : translatedText || "Translation not available"}
           </Typography>
+
+          {selectedLanguage !== "en" && translatedAudioUrl && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Translated Audio
+              </Typography>
+              <Box
+                sx={{
+                  width: "100%",
+                  bgcolor: "background.neutral",
+                  borderRadius: 1,
+                  p: 2,
+                }}
+              >
+                <audio
+                  controls
+                  src={translatedAudioUrl}
+                  style={{ width: "100%" }}
+                />
+              </Box>
+            </Box>
+          )}
         </Box>
       </InfoPanel>
     </VideoContainer>

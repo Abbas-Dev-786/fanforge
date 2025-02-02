@@ -228,8 +228,11 @@ Requirements:
     const audioContent = ttsResponse.audioContent;
 
     // 4. Send the audio file
-    res.set("Content-Type", "audio/mp3");
-    res.send(Buffer.from(audioContent, "base64"));
+    res.json({
+      originalText: transcription,
+      translatedText: translation,
+      audioContent: audioContent.toString("base64"), // Send base64 encoded audio
+    });
   } catch (error) {
     console.error("Error in /translate:", error);
     res.status(500).json({ error: error.message });
