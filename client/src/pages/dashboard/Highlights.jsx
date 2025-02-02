@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef, memo } from "react";
-import { Box, IconButton, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
@@ -10,6 +19,7 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useAuth } from "../../hooks/useAuth";
 import { useHighlights } from "../../hooks/useHighlights";
 import { useTheme } from "@emotion/react";
+import { translateText } from "../../services/translate.service";
 
 const VideoContainer = styled(Box)(({ theme }) => ({
   height: "100vh",
@@ -145,7 +155,28 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
   const videoRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [translatedTitle, setTranslatedTitle] = useState(highlight.title);
   const { user } = useAuth();
+
+  useEffect(() => {
+    const translateContent = async () => {
+      if (selectedLanguage === "en") {
+        setTranslatedTitle(highlight.title);
+        return;
+      }
+      try {
+        const translated = await translateText(
+          highlight.title,
+          selectedLanguage
+        );
+        setTranslatedTitle(translated);
+      } catch (error) {
+        console.error("Translation error:", error);
+      }
+    };
+    translateContent();
+  }, [highlight.title, selectedLanguage]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -245,9 +276,36 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
       </VideoWrapper>
 
       <InfoPanel>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel id="language-select-label">Language</InputLabel>
+            <Select
+              labelId="language-select-label"
+              value={selectedLanguage}
+              label="Language"
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+            >
+              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="es">Spanish</MenuItem>
+              <MenuItem value="fr">French</MenuItem>
+              <MenuItem value="de">German</MenuItem>
+              <MenuItem value="it">Italian</MenuItem>
+              <MenuItem value="ja">Japanese</MenuItem>
+              <MenuItem value="ko">Korean</MenuItem>
+              <MenuItem value="zh">Chinese</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Box>
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-            {highlight.title}
+            {translatedTitle}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {highlight.date}
