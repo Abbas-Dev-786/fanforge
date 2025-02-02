@@ -20,6 +20,10 @@ const authClient = new JWT({
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "working properly" });
+});
+
 // Proxy endpoint
 app.post("/recommend", async (req, res) => {
   try {
