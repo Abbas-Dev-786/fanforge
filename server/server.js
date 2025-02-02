@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Load service account credentials
 const serviceAccount = {
-  private_key: process.env.PRIVATE_KEY,
+  private_key: process.env.PRIVATE_KEY.split(String.raw`\n`).join("\n"),
   client_email: process.env.CLIENT_EMAIL,
 };
 
