@@ -278,9 +278,7 @@ export default function Highlights() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const theme = useTheme();
   const containerRef = useRef(null);
-  const { highlights, isLoading, fetchNextPage } = useHighlights(
-    "001ee97f49795c5bafb4e61e138ea856"
-  );
+  const { highlights, isLoading, fetchNextPage } = useHighlights();
 
   const handleScroll = () => {
     const container = containerRef.current;
