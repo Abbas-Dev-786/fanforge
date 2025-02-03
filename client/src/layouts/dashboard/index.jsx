@@ -19,18 +19,12 @@ const RootStyle = styled("div")({
 const MainStyle = styled("div")(({ theme }) => ({
   flexGrow: 1,
   overflow: "auto",
-  minHeight: "100%",
-  paddingTop: APP_BAR_MOBILE + 12,
-  paddingBottom: theme.spacing(10),
+  minHeight: "100vh",
+  paddingTop: APP_BAR_MOBILE + 10,
   [theme.breakpoints.up("lg")]: {
-    paddingTop: APP_BAR_DESKTOP + 12,
+    paddingTop: APP_BAR_DESKTOP + 10,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-  },
-  // Mobile padding adjustments
-  [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(2),
-    paddingBottom: theme.spacing(10), // Space for bottom navigation
   },
 }));
 
@@ -46,11 +40,10 @@ export default function DashboardLayout() {
 
   return (
     <RootStyle>
-      <DashboardNavbar onOpenSidebar={() => setOpen(true)} isMobile={isMobile} />
+      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
       <DashboardSidebar
         isOpenSidebar={open}
         onCloseSidebar={() => setOpen(false)}
-        isMobile={isMobile}
       />
       <MainStyle>
         <Suspense

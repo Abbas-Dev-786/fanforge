@@ -25,6 +25,8 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   backdropFilter: "blur(6px)",
   WebkitBackdropFilter: "blur(6px)",
   backgroundColor: alpha(theme.palette.background.default, 0.72),
+  position: "fixed",
+  zIndex: theme.zIndex.appBar,
   [theme.breakpoints.up("lg")]: {
     width: `calc(100% - ${DRAWER_WIDTH}px)`,
   },
@@ -34,7 +36,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   minHeight: APPBAR_MOBILE,
   [theme.breakpoints.up("lg")]: {
     minHeight: APPBAR_DESKTOP,
-    padding: theme.spacing(0, 5 ),
+    padding: theme.spacing(0, 2),
   },
 }));
 
