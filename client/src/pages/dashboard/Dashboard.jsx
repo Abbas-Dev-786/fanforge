@@ -1,5 +1,4 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
 import {
   Box,
   Container,
@@ -9,7 +8,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Select,
   MenuItem,
   FormControl,
@@ -21,26 +19,6 @@ import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import mlbService from "../../services/mlb.service";
 import { useNavigate } from "react-router";
-
-// Custom TabPanel component for standings
-function TabPanel({ children, value, index, ...other }) {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`standings-tabpanel-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -61,24 +39,9 @@ const Dashboard = () => {
     queryFn: () =>
       mlbService.getSchedule({
         sportId: 1,
-        // date: today,
-        // gameTypes: ["R"],
         season: selectedSeason,
       }),
     select: (data) => data.dates || [],
-  });
-
-  // Query for standings
-  const {
-    data: standings = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["standings", selectedSeason],
-    queryFn: async () => {
-      const data = await mlbService.getStandings(selectedSeason);
-      return data.records;
-    },
   });
 
   const renderSeasonSelector = () => (
@@ -205,115 +168,12 @@ const Dashboard = () => {
     </Fade>
   );
 
-  const renderStandings = () => (
-    <Fade in timeout={900}>
-      <Card elevation={3}>
-        <CardHeader
-          title={`${selectedSeason} MLB Standings`}
-          sx={{
-            bgcolor: theme.palette.primary.main,
-            color: "white",
-            "& .MuiCardHeader-title": { fontSize: "1.2rem" },
-          }}
-        />
-        {standings.length > 0 && (
-          <Box sx={{ p: 2 }}>
-            {standings.map((division) => (
-              <Box key={division.division.id} sx={{ mb: 2 }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ color: theme.palette.primary.main }}
-                >
-                  {division.division.name}
-                </Typography>
-                <Grid container spacing={1}>
-                  {division.teamRecords.map((team, index) => (
-                    <Grid item xs={12} key={team.team.id}>
-                      <Paper
-                        elevation={1}
-                        sx={{
-                          p: 1.5,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          bgcolor:
-                            index % 2 === 0
-                              ? "background.default"
-                              : "background.paper",
-                          "&:hover": {
-                            bgcolor: theme.palette.action.hover,
-                            transform: "translateX(4px)",
-                          },
-                          transition: "all 0.2s",
-                        }}
-                      >
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: "medium" }}
-                          >
-                            {team.team.name}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", gap: 2 }}>
-                          <Typography variant="body2">
-                            {team.wins}-{team.losses}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            .{Math.round(team.winningPercentage * 1000)}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            GB: {team.gamesBack || "-"}
-                          </Typography>
-                        </Box>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </Card>
-    </Fade>
-  );
-
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="80vh"
-      >
-        <Typography color="error">Failed to load MLB data</Typography>
-      </Box>
-    );
-  }
-
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {renderSeasonSelector()}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           {renderSchedule()}
-        </Grid>
-        <Grid item xs={12}>
-          {renderStandings()}
         </Grid>
       </Grid>
     </Container>
