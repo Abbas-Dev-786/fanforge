@@ -1,4 +1,10 @@
-import { Grid, Typography, Container, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Container,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { useTeams } from "../../hooks/useTeams";
 import TeamCard from "../../components/teams/TeamCard";
 import ErrorDisplay from "../../components/shared/ErrorDisplay";
@@ -15,11 +21,11 @@ export default function Teams() {
 
   return (
     <Container maxWidth="xl" sx={{ px: isMobile ? 1 : 3 }}>
-      <Typography 
-        variant={isMobile ? "h5" : "h4"} 
-        sx={{ 
+      <Typography
+        variant={isMobile ? "h5" : "h4"}
+        sx={{
           mb: isMobile ? 2 : 4,
-          px: isMobile ? 1 : 0 
+          px: isMobile ? 1 : 0,
         }}
       >
         MLB Teams
@@ -30,12 +36,12 @@ export default function Teams() {
           <LoadingGrid count={30} />
         ) : (
           teams.map((team) => (
-            <Grid 
-              item 
-              xs={12} 
-              sm={6} 
-              md={4} 
-              lg={3} 
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
               key={team.id}
               sx={{ p: isMobile ? 1 : 2 }}
             >

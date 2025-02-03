@@ -191,7 +191,10 @@ export default function Profile() {
           <Grid container spacing={2} sx={{ mb: 4 }}>
             {interests?.favoriteTeams?.map((team) => (
               <Grid item xs={6} sm={4} md={3} key={team.id}>
-                <Card>
+                <Card
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/dashboard/teams/${team.id}`)}
+                >
                   <CardMedia
                     component="img"
                     height="140"
@@ -215,7 +218,10 @@ export default function Profile() {
           <Grid container spacing={2}>
             {interests?.favoritePlayers?.map((player) => (
               <Grid item xs={6} sm={4} md={3} key={player.id}>
-                <Card>
+                <Card
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/dashboard/players/${player.id}`)}
+                >
                   <Box sx={{ p: 2, textAlign: "center" }}>
                     <Avatar
                       src={`https://img.mlbstatic.com/mlb/images/players/head_shot/${player.id}.jpg`}

@@ -54,7 +54,7 @@ export default function TeamDetails() {
     data: rosterData,
     isLoading: rosterLoading,
     error: rosterError,
-  } = useTeamRoster(teamId);
+  } = useTeamRoster([teamId]);
 
   if (teamLoading || rosterLoading) return <LoadingScreen />;
   if (teamError || rosterError)
