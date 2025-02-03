@@ -73,24 +73,42 @@ export default function Onboarding() {
 
   const watchedTeams = watch("favoriteTeams");
 
-  // Create a single query for all rosters
+  // Update the useTeamRoster call to pass all selected teams
   const { data: allRosters, isLoading: rostersLoading } = useTeamRoster(
-    selectedTeams.length > 0 ? selectedTeams[0] : null // Pass first team ID or null
+    selectedTeams.length > 0 ? selectedTeams : null
   );
 
-  // Process all players from rosters
+  // Process all players from rosters - updated to handle unique players
   const allPlayers = React.useMemo(() => {
     if (!allRosters || selectedTeams.length === 0) return [];
 
-    return selectedTeams.reduce((acc, teamId) => {
+    // Create a Map to store unique players with their team associations
+    const uniquePlayersMap = new Map();
+
+    selectedTeams.forEach((teamId) => {
       const teamRoster = allRosters?.roster || [];
-      const players = teamRoster.map((player) => ({
-        ...player.person,
-        position: player.position,
-        teamId: teamId,
-      }));
-      return [...acc, ...players];
-    }, []);
+      teamRoster.forEach((player) => {
+        const playerId = player.person.id;
+
+        // If player doesn't exist in map, add them
+        if (!uniquePlayersMap.has(playerId)) {
+          uniquePlayersMap.set(playerId, {
+            ...player.person,
+            position: player.position,
+            teams: [teamId],
+          });
+        } else {
+          // If player exists, add the team to their teams array
+          const existingPlayer = uniquePlayersMap.get(playerId);
+          if (!existingPlayer.teams.includes(teamId)) {
+            existingPlayer.teams.push(teamId);
+          }
+        }
+      });
+    });
+
+    // Convert Map to array
+    return Array.from(uniquePlayersMap.values());
   }, [allRosters, selectedTeams]);
 
   useEffect(() => {
@@ -376,13 +394,22 @@ export default function Onboarding() {
                               >
                                 {player.fullName}
                               </Typography>
-                              <Chip
-                                label={player.position.abbreviation}
-                                size="small"
-                                color="primary"
-                                variant="outlined"
-                                sx={{ mt: 1 }}
-                              />
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  gap: 0.5,
+                                  justifyContent: "center",
+                                  flexWrap: "wrap",
+                                }}
+                              >
+                                <Chip
+                                  label={player.position.abbreviation}
+                                  size="small"
+                                  color="primary"
+                                  variant="outlined"
+                                  sx={{ mt: 1 }}
+                                />
+                              </Box>
                             </Box>
                           </Card>
                         </Grid>
@@ -489,7 +516,7 @@ export default function Onboarding() {
           color="text.secondary"
           mb={4}
         >
-          Let's personalize your experience
+          Let&apos;s personalize your experience
         </Typography>
 
         <Stepper

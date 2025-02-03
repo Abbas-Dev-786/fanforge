@@ -22,10 +22,38 @@ export const useTeam = (teamId) => {
   });
 };
 
-export const useTeamRoster = (teamId) => {
-  return useQuery({
-    queryKey: ["teamRoster", teamId],
-    queryFn: () => teamId ? teamsService.getTeamRoster(teamId) : null,
-    enabled: !!teamId,
+export function useTeamRoster(teamIds) {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["rosters", teamIds],
+    queryFn: async () => {
+      if (!teamIds || teamIds.length === 0) return null;
+
+      // Fetch rosters for all selected teams
+      const rosterPromises = teamIds.map(async (teamId) => {
+        const response = await fetch(
+          `https://statsapi.mlb.com/api/v1/teams/${teamId}/roster/active`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      });
+
+      // Wait for all roster requests to complete
+      const rosters = await Promise.all(rosterPromises);
+
+      // Combine all rosters into a single roster array
+      const combinedRoster = rosters.reduce((acc, curr) => {
+        if (curr && curr.roster) {
+          return [...acc, ...curr.roster];
+        }
+        return acc;
+      }, []);
+
+      return { roster: combinedRoster };
+    },
+    enabled: !!teamIds && teamIds.length > 0,
   });
-};
+
+  return { data, isLoading, error };
+}
