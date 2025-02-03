@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import HeroImg from "@/assets/home-hero.jpg";
 import CertificateImg from "@/assets/certificate.png";
 import PropTypes from "prop-types";
+import { Link } from "react-router";
 
 const ExpItem = ({ item }) => {
   const { value, label } = item;
@@ -106,17 +107,11 @@ const Hero = () => {
                 </Typography>
               </Box>
               <Box sx={{ "& button": { mr: 2 } }}>
-                <ScrollLink
-                  to="popular-course"
-                  spy={true}
-                  smooth={true}
-                  offset={0}
-                  duration={350}
-                >
+                <Link to="/login">
                   <Button color="primary" size="large" variant="contained">
                     Get Started
                   </Button>
-                </ScrollLink>
+                </Link>
                 <ScrollLink
                   to="video-section"
                   spy={true}

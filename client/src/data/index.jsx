@@ -25,15 +25,15 @@ export const navigations = [
 export const expsHero = [
   {
     label: "Teams",
-    value: "10+",
+    value: "30",
   },
   {
     label: "Quality Highlights",
-    value: "20k+",
+    value: "50k+",
   },
   {
     label: "Amazing Stats",
-    value: "10k+",
+    value: "100k+",
   },
 ];
 
