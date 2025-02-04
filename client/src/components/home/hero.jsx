@@ -112,13 +112,7 @@ const Hero = () => {
                     Get Started
                   </Button>
                 </Link>
-                <ScrollLink
-                  to="video-section"
-                  spy={true}
-                  smooth={true}
-                  offset={0}
-                  duration={350}
-                >
+                <Link to="https://youtu.be/P-QL1JWFsi8" target="_blank">
                   <Button
                     color="primary"
                     size="large"
@@ -127,7 +121,7 @@ const Hero = () => {
                   >
                     Watch Demo
                   </Button>
-                </ScrollLink>
+                </Link>
               </Box>
             </Box>
           </Grid>
