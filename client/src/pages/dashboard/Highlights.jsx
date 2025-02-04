@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import {
   Box,
   IconButton,
@@ -19,11 +19,7 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useAuth } from "../../hooks/useAuth";
 import { useHighlights } from "../../hooks/useHighlights";
 import { useTheme } from "@emotion/react";
-import {
-  translateText,
-  translateAudio,
-} from "../../services/translate.service";
-import { useQuery } from "@tanstack/react-query";
+import { translateAudio } from "../../services/translate.service";
 
 const VideoContainer = styled(Box)(({ theme }) => ({
   height: "100vh",
@@ -155,7 +151,7 @@ const VideoControls = memo(({ onLike, onShare, isLiked }) => (
 
 VideoControls.displayName = "VideoControls";
 
-const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
+const HighlightVideo = memo(({ highlight, onVideoEnd, isVisible }) => {
   const videoRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -205,6 +201,19 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
 
     handleAudioTranslation();
   }, [selectedLanguage, highlight.videoUrl]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isVisible) {
+      video.play().catch(console.error);
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  }, [isVisible]);
 
   const handleVideoClick = () => {
     const video = videoRef.current;
@@ -308,12 +317,7 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
             >
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="es">Spanish</MenuItem>
-              <MenuItem value="fr">French</MenuItem>
-              <MenuItem value="de">German</MenuItem>
-              <MenuItem value="it">Italian</MenuItem>
               <MenuItem value="ja">Japanese</MenuItem>
-              <MenuItem value="ko">Korean</MenuItem>
-              <MenuItem value="zh">Chinese</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -336,9 +340,16 @@ const HighlightVideo = memo(({ highlight, onVideoEnd }) => {
             variant="body2"
             sx={{ color: "text.secondary", lineHeight: 1.6, mb: 2 }}
           >
-            {selectedLanguage === "en"
-              ? highlight.description || "No description available"
-              : translatedText || "Translation not available"}
+            {isTranslatingAudio ? (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <CircularProgress size={16} />
+                <span>Translating description...</span>
+              </Box>
+            ) : selectedLanguage === "en" ? (
+              highlight.description || "No description available"
+            ) : (
+              translatedText || "Translation not available"
+            )}
           </Typography>
 
           {selectedLanguage !== "en" && translatedAudioUrl && (
@@ -375,8 +386,9 @@ export default function Highlights() {
   const theme = useTheme();
   const containerRef = useRef(null);
   const { highlights, isLoading, fetchNextPage } = useHighlights();
+  const [lastPlayedIndex, setLastPlayedIndex] = useState(0);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -386,6 +398,7 @@ export default function Highlights() {
 
     if (newIndex !== currentIndex) {
       setCurrentIndex(newIndex);
+      setLastPlayedIndex(newIndex);
     }
 
     if (
@@ -394,7 +407,15 @@ export default function Highlights() {
     ) {
       fetchNextPage();
     }
-  };
+  }, [currentIndex, fetchNextPage]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   if (isLoading && !highlights.length) {
     return (
@@ -429,7 +450,6 @@ export default function Highlights() {
         bottom: 0,
         zIndex: 1,
       }}
-      onScroll={handleScroll}
     >
       {highlights.map((highlight, index) => (
         <Box
@@ -445,6 +465,7 @@ export default function Highlights() {
         >
           <HighlightVideo
             highlight={highlight}
+            isVisible={index === lastPlayedIndex}
             onVideoEnd={() => {
               const nextIndex = currentIndex + 1;
               if (nextIndex < highlights.length) {
