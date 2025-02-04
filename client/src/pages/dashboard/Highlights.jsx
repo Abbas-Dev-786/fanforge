@@ -211,8 +211,15 @@ const HighlightVideo = memo(({ highlight, onVideoEnd, isVisible }) => {
       setIsPlaying(true);
     } else {
       video.pause();
+      video.currentTime = 0; // Reset video position when not visible
       setIsPlaying(false);
     }
+
+    // Cleanup function to ensure video is paused when component unmounts
+    return () => {
+      video.pause();
+      setIsPlaying(false);
+    };
   }, [isVisible]);
 
   const handleVideoClick = () => {
