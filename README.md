@@ -4,7 +4,7 @@
 Baseball isn’t just a sport—it’s a passion, a community, and a way of life for millions of fans worldwide. We wanted to create a platform that makes it easy for fans to stay connected with their favorite teams and players, no matter where they are or what language they speak. Inspired by the way people consume sports highlights today, we envisioned a system that delivers **personalized updates** in **video, audio, and text formats**—ensuring every fan gets the content that matters most to them.  
 
 ## DEMO  
-<a href="[http://example.com/](https://youtu.be/P-QL1JWFsi8)" target="_blank">Youtube Demo Video Link</a>
+[Youtube Demo Link](https://youtu.be/P-QL1JWFsi8)
 
 ## What it does  
 FanForge is a **personalized MLB highlight delivery system** that allows fans to:  
